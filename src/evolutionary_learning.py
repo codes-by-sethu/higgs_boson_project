@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from deap import base, creator, tools, algorithms
+from deap import base, creator, tools, algorithms, gp
 from sklearn.metrics import accuracy_score
 import operator
 
@@ -29,13 +29,13 @@ class EvolutionaryLearner:
     def _setup_deap(self):
         """Setup DEAP creator and toolbox"""
         creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-        creator.create("Individual", list, fitness=creator.FitnessMax)
+        creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMax)
         
         self.toolbox = base.Toolbox()
         
     def _create_primitive_set(self, custom_pset):
         """Create primitive set for genetic programming"""
-        pset = base.PrimitiveSet("MAIN", self.n_features)
+        pset = gp.PrimitiveSet("MAIN", self.n_features)
         
         # Arithmetic operations
         pset.addPrimitive(operator.add, 2)
@@ -92,21 +92,21 @@ class EvolutionaryLearner:
     def initialize_evolution(self, X_train, y_train):
         """Initialize evolutionary learning process"""
         # Register genetic operations
-        self.toolbox.register("expr", tools.genHalfAndHalf, 
+        self.toolbox.register("expr", gp.genHalfAndHalf, 
                              pset=self.pset, min_=1, max_=3)
         self.toolbox.register("individual", tools.initIterate, 
                              creator.Individual, self.toolbox.expr)
         self.toolbox.register("population", tools.initRepeat, 
                              list, self.toolbox.individual)
-        self.toolbox.register("compile", self.toolbox.compile, pset=self.pset)
+        self.toolbox.register("compile", gp.compile, pset=self.pset)
         
         # Register evolutionary operators
         self.toolbox.register("evaluate", self.eval_classifier, 
                              X=X_train, y=y_train)
         self.toolbox.register("select", tools.selTournament, tournsize=3)
-        self.toolbox.register("mate", tools.cxOnePoint)
-        self.toolbox.register("expr_mut", tools.genFull, min_=0, max_=2)
-        self.toolbox.register("mutate", tools.mutUniform, 
+        self.toolbox.register("mate", gp.cxOnePoint)
+        self.toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
+        self.toolbox.register("mutate", gp.mutUniform, 
                              expr=self.toolbox.expr_mut, pset=self.pset)
         
         # Create initial population
