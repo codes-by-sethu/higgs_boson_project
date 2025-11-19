@@ -14,17 +14,6 @@ This project implements and combines Evolutionary Learning and Ensemble Learning
 ### 🔄 Ready for Implementation:
 - **Active Learning** - Code structure ready (requires modAL installation)
 
-## Project Structure
-higgs_boson_project/
-├── src/
-│ ├── data_preprocessing.py # Data loading and preprocessing
-│ ├── evolutionary_learning.py # Genetic Programming implementation
-│ ├── ensemble_learning.py # Ensemble voting methods
-│ └── active_learning.py # Active learning structure (needs modAL)
-├── main.py # Main experiment runner
-└── requirements.txt # Dependencies
-
-
 ## Installation & Setup
 ```bash
 # Install required packages
