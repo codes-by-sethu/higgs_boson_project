@@ -125,7 +125,7 @@ if __name__ == "__main__":
     
     try:
         results = experiment.run_experiments()
-        print("\n🎉 Project completed successfully! Check the results above.")
+        print("\n Project completed successfully! Check the results above.")
     except Exception as e:
         print(f"Error during experiment: {e}")
         print("Please check the individual component tests.")
